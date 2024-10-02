@@ -20,15 +20,16 @@ export default function LoginForm(){
         // this will fetch app/api/auth/login/route.js
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',  
         },
         body: JSON.stringify({username, password}),
+        
         });
 
         const result = await response.json();
         
         setMessage(result.message || result.error);
-        if (result.message == 'Logged in successfully'){
+        if (result.message == 'Logged in'){
             router.push('/dashboard')
         }
     };

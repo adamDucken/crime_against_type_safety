@@ -4,11 +4,6 @@ import crypto from 'crypto';
 
 const connectionString = process.env.DATABASE_URL
 
-/*
-**TODO**
-FOR ENTIRE FILE: you have to implement error handling with try and catch for all fn
-**TODO**
-*/
 
 const pool = new Pool({
     connectionString 
@@ -31,30 +26,33 @@ export async function createSession(userId) {
   }
 }
 
-/*
-**TODO**
-have to implement function that updates session updateSession(); it should expect sessionId and extend it for certain time
-interact with db update the session_table expires_at column ; returns sessionId, and session data maybe 
-**TODO**
-*/
 
-export async function getSession(sessionId){ 
-  // function that finds session, expects sessionId, returns session data or null
-  const result = await pool.query(
-    'SELECT * FROM session_table WHERE session_id = $1 AND expires_at > NOW()',
-    [sessionId]
-  );
-
-  return result.rows[0] || null;
+export async function getSession(sessionId) {
+  try {
+    const result = await pool.query('SELECT * FROM session_table WHERE session_id = $1', [sessionId]);
+    return result.rows[0] || null;
+  } catch (error) {
+    console.error('Error getting session:', error);
+    throw new Error('Failed to get session');
+  }
 }
-
 export async function deleteSession(sessionId){ 
   //function that deletes session, expects sessionId, returns nothing
-  await pool.query('DELETE FROM session_table WHERE session_id = $1', [sessionId]);
+  try {
+    const res = await pool.query('DELETE FROM session_table WHERE session_id = $1', [sessionId]);
+    return res.rowCount
+  } catch (error) {
+    console.error("Error accured while trying to delete db session: ",error)
+    throw new Error("Failed to delete db session")
+  }
 }
 
 export async function deleteExpiredSessions(){ 
   //function that deletes expired sessions, expects/returns nothing
-  await pool.query('DELETE FROM session_table WHERE expires_at <= NOW()');
-  //problem with NOW() needs a fix cuz of different time formats; need to take the functionality to js
+  try {
+    await pool.query('SELECT fn_session_cleanup()');
+  } catch (error) {
+    console.error("Error acccured while trying to cleanup sessions:", error)
+    throw new Error("Failed to cleanup sessions")
+  }
 }

@@ -3,7 +3,7 @@ import { Pool } from 'pg';
 
 import { NextResponse } from 'next/server';
 import { createSession } from '@/app/lib/sessions';
-
+export const runtime = 'nodejs';
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });
 
@@ -27,7 +27,7 @@ export async function POST(request) {
     const sessionId = await createSession(userId);
 
     // Create a new response
-    const response = NextResponse.json({ message: 'Logged in successfully' }, { status: 200 });
+    const response = NextResponse.json({ message: 'Logged in' }, { status: 200 });
 
     // Set the cookie
     response.cookies.set('session', sessionId, {

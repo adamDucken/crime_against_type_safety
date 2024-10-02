@@ -3,34 +3,39 @@ import { deleteSession } from '@/app/lib/sessions';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-export async function GET(request) {
-    //this api rn is called by // app/components/LogoutButton.js in future smth else also might call it idk
+export const runtime = 'nodejs';
+
+export async function GET() {
   try {
     const cookieStore = cookies();
-    const session = cookieStore.get('session');
+    const sessionCookie = cookieStore.get('session');
 
-    if (!session) {
+    if (!sessionCookie) {
       return NextResponse.json({ message: 'No active session' }, { status: 400 });
     }
 
-    const sessionId = session.value;
-    await deleteSession(sessionId);
-    // this is deleteSession() helper function located in app/lib/sessions.js it takes sessionId and deletes the record from db
+    const sessionId = sessionCookie.value;
+    const deletedCount = await deleteSession(sessionId);
+
+    if (deletedCount === 1) {
+      console.log('Deleted DB session');
+    } else {
+      console.log('No active DB session found');
+    }
 
     const response = NextResponse.json({ message: 'Logged out successfully' }, { status: 200 });
 
-    // deleting cookie from browser using next js built in functionality
     response.cookies.set('session', '', {
       httpOnly: true,
-      sameSite: 'None', // change from 'None' to 'Lax' for better security in production if needed
-      secure:  false,// secure it in production process.env.NODE_ENV === 'production', if needed
+      sameSite: 'Lax',
+      secure: process.env.NODE_ENV === 'production',
       path: '/',
       expires: new Date(0),
     });
 
     return response;
-  } catch (err) {
-    console.error('Logout error:', err);
+  } catch (error) {
+    console.error('Logout error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
