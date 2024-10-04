@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-
+import { useRouter } from 'next/navigation'
 
 export default function RegistrationForm() {
   const [username, setUsername] = useState('');
@@ -12,6 +12,8 @@ export default function RegistrationForm() {
   const [surname, setSurname] = useState('');
   const [message, setMessage] = useState('');
 
+  const router = useRouter()
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -28,6 +30,9 @@ export default function RegistrationForm() {
 
     const result = await response.json();
     setMessage(result.message || result.error); 
+    if (result.message){
+      router.push('/login')
+    }
   };
 
   return (

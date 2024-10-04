@@ -3,7 +3,7 @@ import { Pool } from 'pg';
 
 import { NextResponse } from 'next/server';
 import { createSession } from '@/app/lib/sessions';
-export const runtime = 'nodejs';
+
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });
 

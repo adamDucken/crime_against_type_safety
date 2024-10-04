@@ -5,7 +5,6 @@ const { Client } = pg;
 
 const connectionString = process.env.DATABASE_URL
 
-export const runtime = 'nodejs';
 
 export async function POST(req) {
   //this api is called by app/components/RegistrationForm.js

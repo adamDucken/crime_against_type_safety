@@ -3,7 +3,7 @@ import { deleteSession } from '@/app/lib/sessions';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-export const runtime = 'nodejs';
+
 
 export async function GET() {
   try {
