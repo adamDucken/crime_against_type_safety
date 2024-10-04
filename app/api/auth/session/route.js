@@ -1,4 +1,4 @@
-// app/api/auth/validate-session/route.js
+// app/api/auth/session/route.js
 import { NextResponse } from 'next/server';
 import { getSession, createSession, deleteSession, deleteExpiredSessions } from '@/app/lib/sessions';
 

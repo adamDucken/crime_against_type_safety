@@ -15,7 +15,7 @@ export async function middleware(request) {
   }
 
   // Call API route to validate and update session
-  const validateResponse = await fetch(new URL('/api/auth/validate-session', request.url), {
+  const validateResponse = await fetch(new URL('/api/auth/session', request.url), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
