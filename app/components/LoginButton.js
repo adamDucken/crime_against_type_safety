@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function LoginButton() {
   return (
     <Link href="/login">
-        <button>Login</button>
+        <button className="w-full bg-blue-900 text-white py-2 px-4 rounded hover:bg-blue-600 transition">Login</button>
     </Link>
   );
 }

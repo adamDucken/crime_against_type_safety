@@ -6,8 +6,10 @@ import LoginButton from "./components/LoginButton";
 export default function Page() {
 
   return (
-    <div className="flex flex-row ">
-      <h1 className="px-1 ">Home</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+        <h1 className="text-2xl font-bold mb-4 text-center text-blue-900">
+          Home
+        </h1>
       <LoginButton/>
     </div>
   );
